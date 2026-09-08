@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LEGO Brick Evolution Dashboard | 1949–2026</title>
+  <meta name="description" content="Interactive dashboard mapping the evolution of LEGO brick parts, colors, materials, and set complexity from 1949 to 2026.">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800&f[]=satoshi@400,500,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect x='2' y='6' width='20' height='14' rx='2' fill='%23DA291C'/><rect x='4' y='2' width='4' height='5' rx='1' fill='%23DA291C'/><rect x='10' y='2' width='4' height='5' rx='1' fill='%23DA291C'/><rect x='16' y='2' width='4' height='5' rx='1' fill='%23DA291C'/></svg>" />
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+        <rect x="2" y="10" width="32" height="22" rx="3" fill="currentColor" />
+        <rect x="5" y="3" width="6" height="8" rx="1.5" fill="currentColor" opacity="0.6"/>
+        <rect x="15" y="3" width="6" height="8" rx="1.5" fill="currentColor" opacity="0.6"/>
+        <rect x="25" y="3" width="6" height="8" rx="1.5" fill="currentColor" opacity="0.6"/>
+      </svg>
+      <div class="logo-text">
+        <span class="logo-title">Brick Evolution</span>
+        <span class="logo-sub">1949 – 2026</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="data-source">Data: Rebrickable</span>
+      <button data-theme-toggle aria-label="Switch to light mode">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Hero / KPI Section -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-text">
+      <p class="eyebrow">Interactive Data Dashboard</p>
+      <h1>The Evolution of the LEGO Brick</h1>
+      <p class="lead">Seventy-seven years of part designs, color palettes, material shifts, and set complexity — mapped from the first Automatic Binding Brick to today's 40,000+ part catalog.</p>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card" style="--kpi-color: var(--lego-red);">
+        <div class="kpi-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+        </div>
+        <div class="kpi-value" id="kpi-parts">42,565</div>
+        <div class="kpi-label">Unique Part Designs</div>
+        <div class="kpi-delta kpi-up">+2,047 in 2026</div>
+      </div>
+      <div class="kpi-card" style="--kpi-color: var(--lego-yellow);">
+        <div class="kpi-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div class="kpi-value" id="kpi-colors">275</div>
+        <div class="kpi-label">Colors Ever Produced</div>
+        <div class="kpi-delta kpi-neutral">78 active today</div>
+      </div>
+      <div class="kpi-card" style="--kpi-color: var(--lego-blue);">
+        <div class="kpi-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <div class="kpi-value" id="kpi-sets">28,273</div>
+        <div class="kpi-label">Sets Catalogued</div>
+        <div class="kpi-delta kpi-up">1,424 in 2025</div>
+      </div>
+      <div class="kpi-card" style="--kpi-color: var(--lego-green);">
+        <div class="kpi-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="kpi-value" id="kpi-max">11,695</div>
+        <div class="kpi-label">Largest Set (pieces)</div>
+        <div class="kpi-delta kpi-neutral">World Map, 2021</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Timeline Slider Section -->
+<section class="timeline-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Material & Milestone Timeline</h2>
+      <p class="section-desc">Drag the slider to explore key moments in LEGO history. Material shifts, color palette changes, and set complexity milestones are highlighted.</p>
+    </div>
+
+    <div class="timeline-controls">
+      <div class="year-display">
+        <span class="year-label">Selected Year</span>
+        <span class="year-value" id="selected-year">2026</span>
+      </div>
+      <div class="slider-wrapper">
+        <input type="range" id="year-slider" min="1949" max="2026" value="2026" class="year-slider" />
+        <div class="slider-ticks" id="slider-ticks"></div>
+      </div>
+      <div class="playback-controls">
+        <button id="play-btn" class="play-btn" aria-label="Play timeline animation">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Milestone Detail Card -->
+    <div class="milestone-card" id="milestone-card">
+      <div class="milestone-badge" id="milestone-badge">Material</div>
+      <div class="milestone-content">
+        <h3 class="milestone-title" id="milestone-title">Bio-PE Expansion</h3>
+        <p class="milestone-desc" id="milestone-desc">Plant-based materials continue expanding. Blue Violet and Warm Pink join the palette as LEGO targets 100% sustainable materials by 2030.</p>
+        <div class="milestone-stats" id="milestone-stats">
+          <div class="ms-stat">
+            <span class="ms-stat-label">Active Colors</span>
+            <span class="ms-stat-value" id="ms-colors">78</span>
+          </div>
+          <div class="ms-stat">
+            <span class="ms-stat-label">Cumulative Parts</span>
+            <span class="ms-stat-value" id="ms-parts">42,565</span>
+          </div>
+          <div class="ms-stat">
+            <span class="ms-stat-label">Sets Released</span>
+            <span class="ms-stat-value" id="ms-sets">1,390</span>
+          </div>
+          <div class="ms-stat">
+            <span class="ms-stat-label">Avg Pieces/Set</span>
+            <span class="ms-stat-value" id="ms-avg">260</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Charts Grid -->
+<section class="charts-section">
+  <div class="container">
+    <div class="chart-grid">
+
+      <!-- Chart 1: Cumulative Parts & Colors -->
+      <div class="chart-card chart-large">
+        <div class="chart-header">
+          <h3>Catalog Growth: Parts & Colors</h3>
+          <p class="chart-sub">Cumulative unique part designs (Rebrickable IDs, a proxy for molds) and active color palette, 1949–2026</p>
+        </div>
+        <div class="chart-container">
+          <canvas id="chart-growth"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 2: New Parts Per Year (Specialization vs Consolidation) -->
+      <div class="chart-card chart-large">
+        <div class="chart-header">
+          <h3>Peak Specialization vs Consolidation</h3>
+          <p class="chart-sub">New part designs introduced per year (Rebrickable IDs). Peaks indicate specialization eras; dips show consolidation.</p>
+          <div class="chart-legend-inline">
+            <span class="legend-chip legend-peak">Peak Specialization</span>
+            <span class="legend-chip legend-consolidation">Consolidation</span>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="chart-specialization"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 3: Set Complexity -->
+      <div class="chart-card chart-large">
+        <div class="chart-header">
+          <h3>Set Complexity & Adult Themes</h3>
+          <p class="chart-sub">Average pieces per set and large sets (1,000+ pieces) — a proxy for adult-oriented complexity that mirrors the 18+ theme explosion since 2020</p>
+        </div>
+        <div class="chart-container">
+          <canvas id="chart-complexity"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 4: Color Palette Evolution -->
+      <div class="chart-card chart-medium">
+        <div class="chart-header">
+          <h3>Color Palette Evolution</h3>
+          <p class="chart-sub">Active colors per year, showing the 1997–2003 explosion and 2004–2008 purge</p>
+        </div>
+        <div class="chart-container">
+          <canvas id="chart-colors"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 5: New Colors Per Year -->
+      <div class="chart-card chart-medium">
+        <div class="chart-header">
+          <h3>New Colors Introduced</h3>
+          <p class="chart-sub">Color additions per year — note the 1963 Modulex spike and 2000–2003 surge</p>
+        </div>
+        <div class="chart-container">
+          <canvas id="chart-new-colors"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Material Milestones Timeline -->
+<section class="milestones-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Material Milestones</h2>
+      <p class="section-desc">Key material and design shifts that shaped the LEGO system</p>
+    </div>
+    <div class="milestones-track" id="milestones-track">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- Data Sources -->
+<section class="sources-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Data Sources & Methodology</h2>
+    </div>
+    <div class="sources-grid">
+      <div class="source-item">
+        <h4>Rebrickable Database</h4>
+        <p>Part, color, and set inventory data sourced from <a href="https://rebrickable.com/downloads/" target="_blank" rel="noopener">Rebrickable's public CSV downloads</a>. Analysis covers 28,273 sets, 42,565 unique part designs (Rebrickable part IDs, a proxy for molds — includes printed variants and recolors), 275 Rebrickable color IDs, and 1.47M inventory records from 1949–2026.</p>
+      </div>
+      <div class="source-item">
+        <h4>LEGO Official History</h4>
+        <p>Material history (ABS adoption in 1963, bio-polyethylene in 2018) from <a href="https://www.lego.com/en-us/history/articles/e-the-lego-moulding-philosophy" target="_blank" rel="noopener">LEGO's official history articles</a> and <a href="https://www.lego.com/en-us/aboutus/news/2019/october/lego-plants-made-from-plants" target="_blank" rel="noopener">sustainability announcements</a>.</p>
+      </div>
+      <div class="source-item">
+        <h4>Color Palette Research</h4>
+        <p>Solid-color lifecycle data (228 solid colors, 75% discontinued) from <a href="https://sheets.works/data-viz/lego-colors" target="_blank" rel="noopener">The Data Drop's color analysis</a>. Note: Rebrickable tracks 275 color IDs (including transparent, metallic, and chrome finishes); The Data Drop's 228 figure counts solid colors only. Part proliferation analysis from <a href="https://www.reddit.com/r/lego/comments/1u2bmgo/" target="_blank" rel="noopener">community inventory research</a>.</p>
+      </div>
+      <div class="source-item">
+        <h4>Complexity Analysis</h4>
+        <p>Set complexity trends from <a href="https://mode.com/blog/lego-data-analysis/" target="_blank" rel="noopener">Mode Analytics' 67-year analysis</a> and part introduction patterns from <a href="https://safetydave.net/lego-as-a-metaphor-for-software-reuse-does-the-data-stack-up/" target="_blank" rel="noopener">SafetyDave's BrickLink study</a>. Large-set counts (1,000+ pieces) are used as a proxy for adult-oriented complexity; the LEGO 18+ age marking was introduced in 2020.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <p>LEGO Brick Evolution Dashboard — Built from Rebrickable catalog data and historical research. LEGO is a trademark of the LEGO Group. This is an unofficial fan project.</p>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script data-pplx-inline-edit>
+(function () {
+  if (window === window.top) return;
+
+  const allowedParentOrigins = ["https://www.perplexity.ai","https://perplexity.ai","https://testing.perplexity.ai","https://staging.perplexity.ai","https://*.preview.i.perplexity.ai","http://perplexity.localhost","http://localhost:1420","http://127.0.0.1:1420","http://localhost:3000","http://127.0.0.1:3000","http://localhost:5173","http://127.0.0.1:5173"];
+  const MAX_FONT_BYTES = 500 * 1024;
+  const MAX_TOTAL_FONT_BYTES = 2 * 1024 * 1024;
+  let scrollForwarding = false;
+  let scrollRaf = 0;
+  let trustedTopOrigin = null;
+
+  // Allow entries like "https://*.preview.i.perplexity.ai" — the wildcard
+  // matches a single DNS label (no dots), so "https://*.foo" cannot stretch
+  // across multiple labels.
+  function matchesAllowedOrigin(origin) {
+    if (!origin) return false;
+    for (const entry of allowedParentOrigins) {
+      if (!entry.includes("*")) {
+        if (entry === origin) return true;
+        continue;
+      }
+      const pattern = new RegExp(
+        "^" +
+          entry.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, "[^.]+") +
+          "$",
+      );
+      if (pattern.test(origin)) return true;
+    }
+    return false;
+  }
+
+  // Trust decision: when the sender is same-origin-visible (event.origin is a
+  // real origin like https://www.perplexity.ai) we trust event.origin directly.
+  // When event.origin is "null" (opaque broker srcdoc), we fall back to the
+  // broker's stamped `parentOrigin` to identify the top window. The fallback
+  // is claim-only — we rely on the browser's native `targetOrigin` enforcement
+  // on the response path (see postToTrustedTop) to ensure replies can't be
+  // delivered to anyone but the actual top window of that claimed origin.
+  function getTrustedParentOrigin(event) {
+    const forwardedParentOrigin =
+      typeof event.data.parentOrigin === "string" ? event.data.parentOrigin : null;
+    const parentOrigin = event.origin === "null" ? forwardedParentOrigin : event.origin;
+    return matchesAllowedOrigin(parentOrigin) ? parentOrigin : null;
+  }
+
+  // All responses go to window.top with targetOrigin = the allowlisted origin.
+  // An attacker that iframes us inside their own null-origin broker can claim
+  // any parentOrigin they like, but the browser will drop the reply whenever
+  // the real top's origin doesn't match — so the screenshot never leaves.
+  function postToTrustedTop(message) {
+    if (!trustedTopOrigin) return;
+    try {
+      window.top.postMessage(message, trustedTopOrigin);
+    } catch (_error) {}
+  }
+
+  function inlineAll(original, clone) {
+    if (original.nodeType !== 1 || clone.nodeType !== 1) return;
+
+    try {
+      const computedStyle = getComputedStyle(original);
+      // cssText on a computed style is the serialized declaration in modern
+      // Chromium/Safari — a single read beats enumerating ~400 longhand
+      // properties. Firefox returns "" here, so we fall back on empty.
+      const serialized = computedStyle.cssText;
+      if (serialized) {
+        clone.style.cssText = serialized;
+      } else {
+        const parts = new Array(computedStyle.length);
+        for (let index = 0; index < computedStyle.length; index += 1) {
+          const property = computedStyle[index];
+          parts[index] = `${property}:${computedStyle.getPropertyValue(property)};`;
+        }
+        clone.style.cssText = parts.join("");
+      }
+    } catch (_error) {}
+
+    const originalChildren = original.children;
+    const clonedChildren = clone.children;
+    for (
+      let index = 0;
+      index < originalChildren.length && index < clonedChildren.length;
+      index += 1
+    ) {
+      inlineAll(originalChildren[index], clonedChildren[index]);
+    }
+  }
+
+  function extractFontUrl(srcValue) {
+    const matches = [
+      ...srcValue.matchAll(
+        /url\(["']?([^"')]+)["']?\)(?:\s*format\(["']?([^"')]+)["']?\))?/gi,
+      ),
+    ];
+    if (matches.length === 0) return null;
+    const woff2 = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff2"));
+    if (woff2) return woff2[1];
+    const woff = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff"));
+    if (woff) return woff[1];
+    return matches[0][1];
+  }
+
+  // Cache resolved font URL -> data URI across captures. Fonts on a page
+  // essentially never change, and a batch run emits multiple captures back to
+  // back — without this we'd refetch + re-base64 every time.
+  const fontDataUriCache = new Map();
+  const SRC_DECLARATION_RE = /src\s*:\s*[^;}]+/i;
+
+  async function fetchAsDataUri(url) {
+    if (fontDataUriCache.has(url)) return fontDataUriCache.get(url);
+    let dataUri = null;
+    try {
+      const response = await fetch(url, { mode: "cors", credentials: "omit" });
+      if (response.ok) {
+        const blob = await response.blob();
+        if (blob.size <= MAX_FONT_BYTES) {
+          dataUri = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () =>
+              resolve(typeof reader.result === "string" ? reader.result : null);
+            reader.onerror = () => resolve(null);
+            reader.readAsDataURL(blob);
+          });
+        }
+      }
+    } catch (_error) {
+      dataUri = null;
+    }
+    fontDataUriCache.set(url, dataUri);
+    return dataUri;
+  }
+
+  function collectFontFaceRuleTexts() {
+    const rules = [];
+    for (const sheet of document.styleSheets) {
+      let cssRules;
+      try {
+        cssRules = sheet.cssRules;
+      } catch (_error) {
+        continue;
+      }
+      if (!cssRules) continue;
+      for (const rule of cssRules) {
+        const cssText = rule.cssText || "";
+        if (cssText.startsWith("@font-face")) rules.push(cssText);
+      }
+    }
+    return rules;
+  }
+
+  async function buildInlinedFontCss() {
+    const ruleTexts = collectFontFaceRuleTexts();
+    if (ruleTexts.length === 0) return null;
+
+    const resolved = ruleTexts.map((cssText) => {
+      if (!SRC_DECLARATION_RE.test(cssText)) return null;
+      const srcMatch = cssText.match(/src\s*:\s*([^;}]+)[;}]/i);
+      if (!srcMatch) return null;
+      const url = extractFontUrl(srcMatch[1]);
+      if (!url) return null;
+      try {
+        return { cssText, url: new URL(url, document.baseURI).href };
+      } catch (_error) {
+        return null;
+      }
+    });
+
+    const dataUris = await Promise.all(
+      resolved.map((entry) => (entry ? fetchAsDataUri(entry.url) : Promise.resolve(null))),
+    );
+
+    const inlined = [];
+    let totalBytes = 0;
+    for (let index = 0; index < resolved.length; index += 1) {
+      const entry = resolved[index];
+      const dataUri = dataUris[index];
+      if (!entry || !dataUri) continue;
+      const approxBytes = dataUri.length * 0.75;
+      if (totalBytes + approxBytes > MAX_TOTAL_FONT_BYTES) break;
+      totalBytes += approxBytes;
+      inlined.push(entry.cssText.replace(SRC_DECLARATION_RE, `src: url("${dataUri}")`));
+    }
+    return inlined.length > 0 ? inlined.join("\n") : null;
+  }
+
+  function stripExternal(clone) {
+    const images = clone.querySelectorAll("img");
+    for (let index = 0; index < images.length; index += 1) {
+      const src = images[index].getAttribute("src");
+      if (src && !src.startsWith("data:")) images[index].removeAttribute("src");
+    }
+
+    const elements = clone.querySelectorAll("*");
+    for (let index = 0; index < elements.length; index += 1) {
+      const style = elements[index].style.cssText;
+      if (style && style.includes("url(")) {
+        elements[index].style.cssText = style.replace(
+          /url\(["']?(?!data:)[^)"']*["']?\)/gi,
+          "none",
+        );
+      }
+    }
+  }
+
+  function emitScroll() {
+    scrollRaf = 0;
+    if (!scrollForwarding) return;
+    postToTrustedTop({
+      type: "INLINE_EDIT_SCROLL",
+      scrollX: window.scrollX,
+      scrollY: window.scrollY,
+    });
+  }
+
+  window.addEventListener(
+    "scroll",
+    function () {
+      if (!scrollForwarding || scrollRaf) return;
+      scrollRaf = requestAnimationFrame(emitScroll);
+    },
+    { passive: true, capture: true },
+  );
+
+  async function handleCaptureRequest(event) {
+    const requestId = event.data.requestId;
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    function postResult(dataUrl) {
+      postToTrustedTop({
+        type: "INLINE_EDIT_SCREENSHOT_RESULT",
+        requestId,
+        dataUrl,
+        scrollX,
+        scrollY,
+      });
+    }
+
+    try {
+      // Wait for any pending web fonts to resolve so both inline metrics and
+      // the @font-face inlining below see the same loaded faces.
+      if (document.fonts && document.fonts.ready) {
+        try {
+          await document.fonts.ready;
+        } catch (_error) {}
+      }
+
+      const clone = document.documentElement.cloneNode(true);
+      inlineAll(document.documentElement, clone);
+
+      const removedNodes = clone.querySelectorAll("script,link[rel=\"stylesheet\"],style");
+      for (let index = 0; index < removedNodes.length; index += 1) {
+        removedNodes[index].remove();
+      }
+
+      stripExternal(clone);
+
+      // Re-embed web fonts as data-URI @font-face rules so the SVG rasterizer
+      // can resolve them — external font URLs aren't fetched during
+      // foreignObject rendering, which would otherwise force a fallback face
+      // and change text metrics.
+      const inlinedFontCss = await buildInlinedFontCss();
+      if (inlinedFontCss) {
+        const styleEl = document.createElement("style");
+        styleEl.textContent = inlinedFontCss;
+        const head = clone.querySelector("head");
+        if (head) head.appendChild(styleEl);
+        else clone.insertBefore(styleEl, clone.firstChild);
+      }
+
+      const html = new XMLSerializer().serializeToString(clone);
+      const svg =
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">` +
+        '<foreignObject width="100%" height="100%">' +
+        `<div xmlns="http://www.w3.org/1999/xhtml" style="width:${width}px;height:${height}px;overflow:hidden">` +
+        `<div style="position:relative;left:-${scrollX}px;top:-${scrollY}px">` +
+        html +
+        "</div></div></foreignObject></svg>";
+      const svgUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      const image = new Image();
+      image.onload = function () {
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(image, 0, 0);
+        postResult(canvas.toDataURL("image/png"));
+      };
+      image.onerror = function () {
+        postResult(null);
+      };
+      image.src = svgUrl;
+    } catch (_error) {
+      postResult(null);
+    }
+  }
+
+  window.addEventListener("message", function (event) {
+    if (!event.data) return;
+    // Only accept messages from the direct parent frame. Blocks sibling /
+    // unrelated-window postMessage senders that could otherwise reach us.
+    if (event.source !== window.parent) return;
+
+    const trustedParentOrigin = getTrustedParentOrigin(event);
+    if (!trustedParentOrigin) return;
+    trustedTopOrigin = trustedParentOrigin;
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_START") {
+      scrollForwarding = true;
+      emitScroll();
+      return;
+    }
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_STOP") {
+      scrollForwarding = false;
+      if (scrollRaf) cancelAnimationFrame(scrollRaf);
+      scrollRaf = 0;
+      return;
+    }
+
+    if (event.data.type !== "INLINE_EDIT_CAPTURE_REQUEST") return;
+
+    handleCaptureRequest(event);
+  });
+})();
+
+
+</script></body>
+</html>
